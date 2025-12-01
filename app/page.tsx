@@ -9,12 +9,12 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="text-center space-y-8 sm:space-y-16 max-w-md w-full px-4">
         <div className="space-y-6 sm:space-y-8">
-          <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
-            <span className="text-4xl sm:text-6xl md:text-7xl animate-bounce-slow">🏈</span>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent leading-tight">
+          <div className="flex items-center justify-center gap-2 sm:gap-3">
+            <span className="text-4xl sm:text-5xl animate-bounce-slow">🏈</span>
+            <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent whitespace-nowrap">
               NFL Imposter Game
             </h1>
-            <span className="text-4xl sm:text-6xl md:text-7xl animate-bounce-slow animation-delay-200">🏈</span>
+            <span className="text-4xl sm:text-5xl animate-bounce-slow animation-delay-200">🏈</span>
           </div>
           
           <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold tracking-wide px-2">
