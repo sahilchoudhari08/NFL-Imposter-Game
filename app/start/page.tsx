@@ -7,40 +7,40 @@ export default function StartPage() {
   const router = useRouter()
   const [imposters, setImposters] = useState<number | null>(null)
   const [numPlayers, setNumPlayers] = useState<number | null>(null)
-  const [step, setStep] = useState<'imposters' | 'players'>('imposters')
-
-  const handleImpostersContinue = () => {
-    if (imposters !== null) {
-      setStep('players')
-    }
-  }
+  const [step, setStep] = useState<'players' | 'imposters'>('players')
 
   const handlePlayersContinue = () => {
     if (numPlayers !== null && numPlayers > 0) {
+      setStep('imposters')
+    }
+  }
+
+  const handleImpostersContinue = () => {
+    if (imposters !== null && numPlayers !== null) {
       router.push(`/setup?imposters=${imposters}&players=${numPlayers}`)
     }
   }
 
   const handleBack = () => {
-    setStep('imposters')
+    setStep('players')
   }
 
-  if (step === 'players') {
+  if (step === 'imposters') {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
         <div className="text-center space-y-8 max-w-md w-full">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            How many players?
+            How many imposters?
           </h1>
           
           <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
             <div className="grid grid-cols-3 gap-4">
-              {[3, 4, 5, 6, 7, 8].map((num) => (
+              {[0, 1, 2].map((num) => (
                 <button
                   key={num}
-                  onClick={() => setNumPlayers(num)}
+                  onClick={() => setImposters(num)}
                   className={`py-6 px-4 rounded-xl font-bold text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 ${
-                    numPlayers === num
+                    imposters === num
                       ? 'bg-blue-600 text-white shadow-lg'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
@@ -58,10 +58,10 @@ export default function StartPage() {
                 Back
               </button>
               <button
-                onClick={handlePlayersContinue}
-                disabled={numPlayers === null}
+                onClick={handleImpostersContinue}
+                disabled={imposters === null}
                 className={`flex-1 py-4 px-6 rounded-xl text-lg font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md ${
-                  numPlayers !== null
+                  imposters !== null
                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
@@ -79,17 +79,17 @@ export default function StartPage() {
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
       <div className="text-center space-y-8 max-w-md w-full">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          How many imposters?
+          How many players?
         </h1>
         
         <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
           <div className="grid grid-cols-3 gap-4">
-            {[0, 1, 2].map((num) => (
+            {[3, 4, 5, 6, 7, 8].map((num) => (
               <button
                 key={num}
-                onClick={() => setImposters(num)}
+                onClick={() => setNumPlayers(num)}
                 className={`py-6 px-4 rounded-xl font-bold text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 ${
-                  imposters === num
+                  numPlayers === num
                     ? 'bg-blue-600 text-white shadow-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
@@ -100,10 +100,10 @@ export default function StartPage() {
           </div>
           
           <button
-            onClick={handleImpostersContinue}
-            disabled={imposters === null}
+            onClick={handlePlayersContinue}
+            disabled={numPlayers === null}
             className={`w-full py-4 px-6 rounded-xl text-lg font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md ${
-              imposters !== null
+              numPlayers !== null
                 ? 'bg-blue-600 hover:bg-blue-700 text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
