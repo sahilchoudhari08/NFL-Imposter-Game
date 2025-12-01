@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 interface Role {
   isImposter: boolean
@@ -17,6 +17,7 @@ export default function RevealPage() {
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [prevPlayerIndex, setPrevPlayerIndex] = useState<number>(-1)
 
   useEffect(() => {
     // Load game data from sessionStorage
@@ -34,9 +35,12 @@ export default function RevealPage() {
   }, [router])
 
   useEffect(() => {
-    // Reset revealed state when player index changes
-    setRevealed(false)
-  }, [playerIndex])
+    // Reset revealed state immediately when player index changes
+    if (playerIndex !== prevPlayerIndex) {
+      setRevealed(false)
+      setPrevPlayerIndex(playerIndex)
+    }
+  }, [playerIndex, prevPlayerIndex])
 
   const handleReveal = () => {
     // Trigger vibration if supported
@@ -48,8 +52,8 @@ export default function RevealPage() {
 
   const handleNext = () => {
     if (playerIndex < players.length - 1) {
-      router.push(`/reveal/${playerIndex + 1}`)
       setRevealed(false)
+      router.push(`/reveal/${playerIndex + 1}`)
     } else {
       router.push('/reveal-imposters')
     }
@@ -57,14 +61,14 @@ export default function RevealPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
+        <div className="text-white">Loading...</div>
       </div>
     )
   }
 
-  const currentPlayer = players[playerIndex]
-  const role = roles[currentPlayer]
+  const currentPlayer = useMemo(() => players[playerIndex], [players, playerIndex])
+  const role = useMemo(() => currentPlayer ? roles[currentPlayer] : undefined, [roles, currentPlayer])
 
   if (!currentPlayer || !role) {
     return (
@@ -82,6 +86,7 @@ export default function RevealPage() {
           : 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-900 dark:text-white'
       }`}
       onClick={!revealed ? handleReveal : undefined}
+      key={`player-${playerIndex}`}
     >
       {!revealed ? (
         <div className="text-center space-y-8 animate-pulse">
