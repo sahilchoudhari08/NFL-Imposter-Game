@@ -34,13 +34,13 @@ function SetupContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="text-center space-y-8 max-w-md w-full">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           Enter Players
         </h1>
         
-        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
           <div className="space-y-4">
             {players.map((player, index) => (
               <input
@@ -48,7 +48,7 @@ function SetupContent() {
                 type="text"
                 value={player}
                 onChange={(e) => handlePlayerChange(index, e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-lg focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-blue-500 dark:focus:border-blue-400 transition-colors placeholder-gray-400 dark:placeholder-gray-500"
                 placeholder={`Player ${index + 1}`}
               />
             ))}
@@ -56,7 +56,7 @@ function SetupContent() {
           
           <button
             onClick={handleStart}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
           >
             Start
           </button>

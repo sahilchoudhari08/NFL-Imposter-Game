@@ -11,13 +11,13 @@ export default function ModePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="text-center space-y-8 max-w-md w-full">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           Choose Mode
         </h1>
         
-        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
           <button
             onClick={() => handleModeSelect('allTime')}
             className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-6 px-6 rounded-xl text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"

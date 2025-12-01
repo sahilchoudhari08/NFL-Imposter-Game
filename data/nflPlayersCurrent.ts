@@ -65,7 +65,6 @@ export const nflPlayersCurrent = [
   "Keenan Allen",
   "DeVonta Smith",
   "DeAndre Hopkins",
-  "Amari Cooper",
   "Terry McLaurin",
   "Christian Kirk",
   "Calvin Ridley",
@@ -177,14 +176,9 @@ export const nflPlayersCurrent = [
   "Tucker Kraft",
   "Mo Alie-Cox",
   "Dawson Knox",
-  "Donald Parham Jr.",
   "Mike Gesicki",
   "Juwan Johnson",
   "Adam Trautman",
-  "Irv Smith Jr.",
-  "Brevin Jordan",
-  "Kylen Granson",
-  "Tanner Hudson",
   "Will Dissly",
   "CJ Uzomah"
 ];

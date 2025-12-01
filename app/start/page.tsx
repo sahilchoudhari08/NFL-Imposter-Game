@@ -27,13 +27,13 @@ export default function StartPage() {
 
   if (step === 'imposters') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center space-y-8 max-w-md w-full">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             How many imposters?
           </h1>
           
-          <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
             <div className="grid grid-cols-3 gap-4">
               {[0, 1, 2].map((num) => (
                 <button
@@ -42,7 +42,7 @@ export default function StartPage() {
                   className={`py-6 px-4 rounded-xl font-bold text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 ${
                     imposters === num
                       ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
                   {num}
@@ -53,7 +53,7 @@ export default function StartPage() {
             <div className="flex gap-4">
               <button
                 onClick={handleBack}
-                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
+                className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
               >
                 Back
               </button>
@@ -62,8 +62,8 @@ export default function StartPage() {
                 disabled={imposters === null}
                 className={`flex-1 py-4 px-6 rounded-xl text-lg font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md ${
                   imposters !== null
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white'
+                    : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                 }`}
               >
                 Continue
@@ -76,13 +76,13 @@ export default function StartPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <div className="text-center space-y-8 max-w-md w-full">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           How many players?
         </h1>
         
-        <div className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
           <div className="grid grid-cols-3 gap-4">
             {[3, 4, 5, 6, 7, 8].map((num) => (
               <button
@@ -91,7 +91,7 @@ export default function StartPage() {
                 className={`py-6 px-4 rounded-xl font-bold text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 ${
                   numPlayers === num
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {num}
@@ -104,8 +104,8 @@ export default function StartPage() {
             disabled={numPlayers === null}
             className={`w-full py-4 px-6 rounded-xl text-lg font-bold transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md ${
               numPlayers !== null
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white'
+                : 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
             }`}
           >
             Continue

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import '../styles/globals.css'
+import DarkModeToggle from './components/DarkModeToggle'
 
 export const metadata: Metadata = {
   title: 'NFL Imposter Game - Free Online Party Game',
@@ -34,7 +35,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <DarkModeToggle />
+        {children}
+      </body>
     </html>
   )
 }
