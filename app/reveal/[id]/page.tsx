@@ -75,10 +75,10 @@ export default function RevealPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-0 m-0 w-full">
       {!revealed ? (
         <div 
-          className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 text-white transition-all duration-300"
+          className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 text-white transition-all duration-300 fixed inset-0"
           onClick={handleReveal}
         >
           <div className="text-center space-y-8 animate-pulse">
@@ -91,7 +91,7 @@ export default function RevealPage() {
           </div>
         </div>
       ) : (
-        <div className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 transition-all duration-500 animate-fade-in">
+        <div className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 transition-all duration-500 animate-fade-in fixed inset-0">
           <div className="text-center space-y-8 max-w-md w-full px-4">
             <h1 className="text-3xl font-bold mb-4">
               {currentPlayer}
