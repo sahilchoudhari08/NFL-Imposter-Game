@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useParams } from 'next/navigation'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Role {
   isImposter: boolean
@@ -11,36 +11,39 @@ interface Role {
 export default function RevealPage() {
   const router = useRouter()
   const params = useParams()
-  const playerIndex = parseInt(params.id as string)
+  const playerIndex = params.id ? parseInt(params.id as string) : -1
   
   const [players, setPlayers] = useState<string[]>([])
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [prevPlayerIndex, setPrevPlayerIndex] = useState<number>(-1)
 
   useEffect(() => {
-    // Load game data from sessionStorage
-    const storedPlayers = sessionStorage.getItem('players')
-    const storedRoles = sessionStorage.getItem('gameRoles')
-    
-    if (storedPlayers && storedRoles) {
-      setPlayers(JSON.parse(storedPlayers))
-      setRoles(JSON.parse(storedRoles))
-      setIsLoading(false)
-    } else {
-      // If no game data, redirect to home
-      router.push('/')
+    // Load game data from sessionStorage (client-side only)
+    if (typeof window !== 'undefined') {
+      const storedPlayers = sessionStorage.getItem('players')
+      const storedRoles = sessionStorage.getItem('gameRoles')
+      
+      if (storedPlayers && storedRoles) {
+        try {
+          setPlayers(JSON.parse(storedPlayers))
+          setRoles(JSON.parse(storedRoles))
+          setIsLoading(false)
+        } catch (error) {
+          console.error('Error parsing game data:', error)
+          router.push('/')
+        }
+      } else {
+        // If no game data, redirect to home
+        router.push('/')
+      }
     }
   }, [router])
 
   useEffect(() => {
     // Reset revealed state immediately when player index changes
-    if (playerIndex !== prevPlayerIndex) {
-      setRevealed(false)
-      setPrevPlayerIndex(playerIndex)
-    }
-  }, [playerIndex, prevPlayerIndex])
+    setRevealed(false)
+  }, [playerIndex])
 
   const handleReveal = () => {
     // Trigger vibration if supported
@@ -59,7 +62,7 @@ export default function RevealPage() {
     }
   }
 
-  if (isLoading) {
+  if (isLoading || playerIndex < 0 || isNaN(playerIndex)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -67,13 +70,13 @@ export default function RevealPage() {
     )
   }
 
-  const currentPlayer = useMemo(() => players[playerIndex], [players, playerIndex])
-  const role = useMemo(() => currentPlayer ? roles[currentPlayer] : undefined, [roles, currentPlayer])
+  const currentPlayer = players[playerIndex]
+  const role = currentPlayer ? roles[currentPlayer] : undefined
 
   if (!currentPlayer || !role) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-500">Error: Player not found</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
+        <div className="text-white">Error: Player not found</div>
       </div>
     )
   }
