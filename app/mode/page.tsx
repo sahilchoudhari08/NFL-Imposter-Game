@@ -38,22 +38,25 @@ export default function ModePage() {
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translate3d(0, 20px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.4s ease-out forwards;
-          will-change: opacity, transform;
+          animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
         }
         
         button {
-          will-change: transform;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `}</style>
     </div>

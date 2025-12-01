@@ -140,20 +140,22 @@ export default function StartPage() {
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translate3d(0, 20px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.8s ease-out;
+          animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
         }
         
         .animation-delay-200 {
-          animation-delay: 0.2s;
+          animation-delay: 0.15s;
         }
       `}</style>
     </div>

@@ -134,37 +134,44 @@ export default function RevealImpostersPage() {
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translate3d(0, 20px, 0);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translate3d(0, 0, 0);
           }
         }
         
         @keyframes scale-in {
           from {
-            transform: scale(0.9);
+            transform: translate3d(0, 0, 0) scale(0.9);
             opacity: 0;
           }
           to {
-            transform: scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
             opacity: 1;
           }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.4s ease-out forwards;
-          will-change: opacity, transform;
-        }
-        
-        button {
-          will-change: transform;
-          backface-visibility: hidden;
+          animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
         }
         
         .animate-scale-in {
-          animation: scale-in 0.4s ease-out;
+          animation: scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+        
+        button {
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `}</style>
     </div>

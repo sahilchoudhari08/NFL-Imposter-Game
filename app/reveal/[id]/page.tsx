@@ -17,6 +17,7 @@ export default function RevealPage() {
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(-1)
 
   useEffect(() => {
     // Load game data from sessionStorage (client-side only)
@@ -26,9 +27,15 @@ export default function RevealPage() {
       
       if (storedPlayers && storedRoles) {
         try {
-          setPlayers(JSON.parse(storedPlayers))
-          setRoles(JSON.parse(storedRoles))
+          const parsedPlayers = JSON.parse(storedPlayers)
+          const parsedRoles = JSON.parse(storedRoles)
+          setPlayers(parsedPlayers)
+          setRoles(parsedRoles)
           setIsLoading(false)
+          // Initialize current player index once data is loaded
+          if (currentPlayerIndex < 0 && playerIndex >= 0) {
+            setCurrentPlayerIndex(playerIndex)
+          }
         } catch (error) {
           console.error('Error parsing game data:', error)
           router.push('/')
@@ -38,12 +45,15 @@ export default function RevealPage() {
         router.push('/')
       }
     }
-  }, [router])
+  }, [router, currentPlayerIndex, playerIndex])
 
   useEffect(() => {
     // Reset revealed state immediately when player index changes
-    setRevealed(false)
-  }, [playerIndex])
+    if (playerIndex !== currentPlayerIndex && playerIndex >= 0 && !isLoading) {
+      setRevealed(false)
+      setCurrentPlayerIndex(playerIndex)
+    }
+  }, [playerIndex, currentPlayerIndex, isLoading])
 
   const handleReveal = () => {
     // Trigger vibration if supported
@@ -62,7 +72,7 @@ export default function RevealPage() {
     }
   }
 
-  if (isLoading || playerIndex < 0 || isNaN(playerIndex)) {
+  if (isLoading || playerIndex < 0 || isNaN(playerIndex) || playerIndex !== currentPlayerIndex) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -89,7 +99,6 @@ export default function RevealPage() {
           : 'bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-900 dark:text-white'
       }`}
       onClick={!revealed ? handleReveal : undefined}
-      key={`player-${playerIndex}`}
     >
       {!revealed ? (
         <div className="text-center space-y-8 animate-pulse">
@@ -145,29 +154,32 @@ export default function RevealPage() {
         
         @keyframes scale-in {
           from {
-            transform: scale(0.9);
+            transform: translate3d(0, 0, 0) scale(0.9);
             opacity: 0;
           }
           to {
-            transform: scale(1);
+            transform: translate3d(0, 0, 0) scale(1);
             opacity: 1;
           }
         }
         
         .animate-fade-in {
-          animation: fade-in 0.4s ease-out forwards;
-          will-change: opacity, transform;
+          animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
         .animate-scale-in {
-          animation: scale-in 0.4s ease-out forwards;
-          will-change: transform, opacity;
+          animation: scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
         
         button {
-          will-change: transform;
+          transform: translate3d(0, 0, 0);
+          -webkit-transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
         }
       `}</style>
     </div>
