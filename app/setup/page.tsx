@@ -9,8 +9,11 @@ function SetupContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const imposters = parseInt(searchParams.get('imposters') || '0')
+  const numPlayers = parseInt(searchParams.get('players') || '3')
   
-  const [players, setPlayers] = useState(['Player 1', 'Player 2', 'Player 3'])
+  const [players, setPlayers] = useState(
+    Array.from({ length: numPlayers }, (_, i) => `Player ${i + 1}`)
+  )
 
   const handlePlayerChange = (index: number, value: string) => {
     const newPlayers = [...players]
