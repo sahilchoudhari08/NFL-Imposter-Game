@@ -11,28 +11,51 @@ export default function ModePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="text-center space-y-8 max-w-md w-full">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="text-center space-y-12 max-w-md w-full">
+        <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent mb-4">
           Choose Mode
         </h1>
         
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
+        <div className="space-y-4 animate-fade-in">
           <button
             onClick={() => handleModeSelect('allTime')}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-6 px-6 rounded-xl text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white font-bold py-6 px-6 rounded-2xl text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl"
           >
             All-Time Mode
           </button>
           
           <button
             onClick={() => handleModeSelect('current')}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-6 px-6 rounded-xl text-xl transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white font-bold py-6 px-6 rounded-2xl text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl"
           >
             Current Mode
           </button>
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.4s ease-out forwards;
+          will-change: opacity, transform;
+        }
+        
+        button {
+          will-change: transform;
+          backface-visibility: hidden;
+        }
+      `}</style>
     </div>
   )
 }

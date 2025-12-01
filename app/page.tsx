@@ -6,30 +6,71 @@ export default function Home() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="text-center space-y-8 max-w-md w-full">
-        <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
-          NFL Imposter Game
-        </h1>
-        
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
-          <div className="space-y-4">
-            <p className="text-gray-600 dark:text-gray-300 text-lg">
-              This app assigns roles. Pass the phone around.
-            </p>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              Play the NFL Imposter Game - a fun party game where players try to identify the imposter. Choose from All-Time NFL legends or Current NFL stars. Free to play, works on any device.
-            </p>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="text-center space-y-16 max-w-md w-full">
+        <div className="space-y-8">
+          <div className="flex items-center justify-center gap-4">
+            <span className="text-7xl animate-bounce-slow">🏈</span>
+            <h1 className="text-6xl md:text-7xl font-extrabold text-gray-900 dark:text-white whitespace-nowrap bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent">
+              NFL Imposter Game
+            </h1>
+            <span className="text-7xl animate-bounce-slow animation-delay-200">🏈</span>
           </div>
           
-          <button
-            onClick={() => router.push('/mode')}
-            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
-          >
-            Start Game
-          </button>
+          <p className="text-2xl text-gray-700 dark:text-gray-300 font-semibold tracking-wide">
+            This app assigns roles. Pass the phone around.
+          </p>
         </div>
+        
+        <button
+          onClick={() => router.push('/mode')}
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-bold py-6 px-8 rounded-2xl text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/50 animate-fade-in"
+        >
+          Start Game
+        </button>
       </div>
+      
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.4s ease-out forwards;
+          will-change: opacity, transform;
+        }
+        
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+          will-change: transform;
+        }
+        
+        .animation-delay-200 {
+          animation-delay: 0.15s;
+        }
+        
+        button {
+          will-change: transform;
+          backface-visibility: hidden;
+          -webkit-font-smoothing: antialiased;
+        }
+      `}</style>
     </div>
   )
 }

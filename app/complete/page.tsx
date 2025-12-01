@@ -11,25 +11,59 @@ export default function CompletePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="text-center space-y-8 max-w-md w-full">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 space-y-6">
-          <div className="text-6xl mb-4">✅</div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Roles assigned.
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-blue-50 via-blue-100 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="text-center space-y-12 max-w-md w-full">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-8 animate-fade-in">
+          <div className="text-7xl mb-4 animate-bounce-slow">🎮</div>
+          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600 bg-clip-text text-transparent mb-8">
+            Game Over!
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-            Start giving clues!
-          </p>
           
           <button
             onClick={handleNewGame}
-            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-bold py-5 px-8 rounded-2xl text-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/50"
           >
             New Game
           </button>
         </div>
       </div>
+      
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes bounce-slow {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+        }
+        
+        .animate-fade-in {
+          animation: fade-in 0.4s ease-out forwards;
+          will-change: opacity, transform;
+        }
+        
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+          will-change: transform;
+        }
+        
+        button {
+          will-change: transform;
+          backface-visibility: hidden;
+        }
+      `}</style>
     </div>
   )
 }
