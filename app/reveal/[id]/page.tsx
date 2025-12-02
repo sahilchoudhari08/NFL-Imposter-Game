@@ -49,11 +49,6 @@ export default function RevealPage() {
       setPlayers(parsedPlayers)
       setRoles(parsedRoles)
       setIsLoading(false)
-      
-      // Initialize current player index
-      if (playerIndex >= 0) {
-        setCurrentPlayerIndex(playerIndex)
-      }
     } catch (error) {
       console.error('Error loading game data:', error)
       router.push('/')
@@ -61,10 +56,12 @@ export default function RevealPage() {
   }, [router])
 
   useEffect(() => {
-    // Update current player index when route changes
-    if (!isLoading && playerIndex >= 0 && playerIndex !== currentPlayerIndex) {
-      setRevealed(false)
-      setCurrentPlayerIndex(playerIndex)
+    // Update current player index when route changes or data loads
+    if (!isLoading && playerIndex >= 0) {
+      if (playerIndex !== currentPlayerIndex) {
+        setRevealed(false)
+        setCurrentPlayerIndex(playerIndex)
+      }
     }
   }, [playerIndex, isLoading, currentPlayerIndex])
 
