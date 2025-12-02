@@ -17,6 +17,7 @@ export default function RevealPage() {
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [playerIndex, setPlayerIndex] = useState<number>(-1)
+  const [displayedPlayerIndex, setDisplayedPlayerIndex] = useState<number>(-1)
 
   // Get player index from params safely
   useEffect(() => {
@@ -24,6 +25,10 @@ export default function RevealPage() {
       if (params && params.id) {
         const parsed = parseInt(String(params.id))
         if (!isNaN(parsed) && parsed >= 0) {
+          // If player index is changing, reset revealed state
+          if (parsed !== playerIndex) {
+            setRevealed(false)
+          }
           setPlayerIndex(parsed)
         }
       }
@@ -31,7 +36,14 @@ export default function RevealPage() {
       console.error('Error parsing player index:', error)
       router.push('/')
     }
-  }, [params, router])
+  }, [params, router, playerIndex])
+
+  // Update displayed player index only when data is ready
+  useEffect(() => {
+    if (!isLoading && playerIndex >= 0 && players.length > 0) {
+      setDisplayedPlayerIndex(playerIndex)
+    }
+  }, [isLoading, playerIndex, players.length])
 
   // Load game data from sessionStorage
   useEffect(() => {
@@ -89,8 +101,8 @@ export default function RevealPage() {
     }
   }
 
-  // Show loading while data is loading or player index is invalid
-  if (isLoading || playerIndex < 0 || !players.length) {
+  // Show loading while data is loading, player index is invalid, or indices don't match
+  if (isLoading || playerIndex < 0 || !players.length || playerIndex !== displayedPlayerIndex) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -98,9 +110,9 @@ export default function RevealPage() {
     )
   }
 
-  // Get current player safely
-  const currentPlayer = playerIndex >= 0 && playerIndex < players.length 
-    ? players[playerIndex] 
+  // Get current player safely using displayedPlayerIndex
+  const currentPlayer = displayedPlayerIndex >= 0 && displayedPlayerIndex < players.length 
+    ? players[displayedPlayerIndex] 
     : null
 
   if (!currentPlayer) {
@@ -123,7 +135,7 @@ export default function RevealPage() {
 
   return (
     <div 
-      key={`reveal-${playerIndex}`}
+      key={`reveal-${displayedPlayerIndex}`}
       className={`w-full h-screen flex flex-col items-center justify-center fixed inset-0 ${
         !revealed 
           ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white' 
@@ -168,7 +180,7 @@ export default function RevealPage() {
             onClick={handleNext}
             className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-bold py-5 px-6 rounded-2xl text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/50 mt-8"
           >
-            {playerIndex < players.length - 1 ? 'Next Player' : 'Complete'}
+            {displayedPlayerIndex < players.length - 1 ? 'Next Player' : 'Complete'}
           </button>
         </div>
       )}
