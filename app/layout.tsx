@@ -3,6 +3,8 @@ import '../styles/globals.css'
 import DarkModeToggle from './components/DarkModeToggle'
 import HomeButton from './components/HomeButton'
 import StructuredData from './components/StructuredData'
+import GoogleAnalytics from './components/GoogleAnalytics'
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   title: 'NFL Imposter Game - Free Online Party Game',
@@ -68,9 +70,11 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body>
+        <GoogleAnalytics />
         <HomeButton />
         <DarkModeToggle />
         {children}
+        <Analytics />
       </body>
     </html>
   )
