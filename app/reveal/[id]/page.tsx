@@ -45,13 +45,15 @@ export default function RevealPage() {
         router.push('/')
       }
     }
-  }, [router, currentPlayerIndex, playerIndex])
+  }, [router])
 
   useEffect(() => {
-    // Reset revealed state immediately when player index changes
-    if (playerIndex !== currentPlayerIndex && playerIndex >= 0 && !isLoading) {
-      setRevealed(false)
-      setCurrentPlayerIndex(playerIndex)
+    // Immediately update current player index when route changes
+    if (playerIndex >= 0 && !isLoading) {
+      if (playerIndex !== currentPlayerIndex) {
+        setCurrentPlayerIndex(playerIndex)
+        setRevealed(false)
+      }
     }
   }, [playerIndex, currentPlayerIndex, isLoading])
 
@@ -72,7 +74,16 @@ export default function RevealPage() {
     }
   }
 
-  if (isLoading || playerIndex < 0 || isNaN(playerIndex) || playerIndex !== currentPlayerIndex) {
+  if (isLoading || playerIndex < 0 || isNaN(playerIndex)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
+  }
+
+  // Only render player content if indices match to prevent showing old player
+  if (playerIndex !== currentPlayerIndex) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>

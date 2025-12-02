@@ -33,7 +33,7 @@ export default function StartPage() {
             How many imposters?
           </h1>
           
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
+          <div key="imposters-card" className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
             <div className="grid grid-cols-3 gap-4">
               {[0, 1, 2].map((num) => (
                 <button
