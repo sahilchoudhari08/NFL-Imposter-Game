@@ -32,6 +32,10 @@ export default function RevealPage() {
           setPlayers(parsedPlayers)
           setRoles(parsedRoles)
           setIsLoading(false)
+          // Initialize prevPlayerIndex when data loads
+          if (playerIndex >= 0 && prevPlayerIndex < 0) {
+            setPrevPlayerIndex(playerIndex)
+          }
         } catch (error) {
           console.error('Error parsing game data:', error)
           router.push('/')
@@ -41,12 +45,13 @@ export default function RevealPage() {
         router.push('/')
       }
     }
-  }, [router])
+  }, [router, playerIndex, prevPlayerIndex])
 
   useEffect(() => {
-    // Reset revealed state when player index changes
-    if (playerIndex !== prevPlayerIndex) {
+    // Reset revealed state and sync index immediately when player index changes
+    if (playerIndex !== prevPlayerIndex && playerIndex >= 0) {
       setRevealed(false)
+      // Update immediately to prevent lag
       setPrevPlayerIndex(playerIndex)
     }
   }, [playerIndex, prevPlayerIndex])
@@ -68,7 +73,7 @@ export default function RevealPage() {
     }
   }
 
-  if (isLoading || playerIndex < 0 || isNaN(playerIndex)) {
+  if (isLoading || playerIndex < 0 || isNaN(playerIndex) || !players.length) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -76,7 +81,8 @@ export default function RevealPage() {
     )
   }
 
-  if (playerIndex < 0 || isNaN(playerIndex) || !players.length) {
+  // Show loading if player index hasn't synced yet to prevent showing old player
+  if (playerIndex !== prevPlayerIndex) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -84,8 +90,17 @@ export default function RevealPage() {
     )
   }
 
-  const currentPlayer = players[playerIndex]
-  const role = currentPlayer ? roles[currentPlayer] : undefined
+  // Only compute player when indices match to prevent stale data
+  const currentPlayer = useMemo(() => {
+    if (playerIndex === prevPlayerIndex && playerIndex >= 0 && players.length > playerIndex) {
+      return players[playerIndex]
+    }
+    return null
+  }, [players, playerIndex, prevPlayerIndex])
+
+  const role = useMemo(() => {
+    return currentPlayer ? roles[currentPlayer] : undefined
+  }, [roles, currentPlayer])
 
   if (!currentPlayer || !role) {
     return (
@@ -108,7 +123,7 @@ export default function RevealPage() {
     >
       {!revealed ? (
         <div key={`tap-to-reveal-${playerIndex}`} className="text-center space-y-8 animate-pulse">
-          <h1 className="text-4xl font-bold mb-4">
+          <h1 key={`player-name-${playerIndex}`} className="text-4xl font-bold mb-4">
             {currentPlayer}
           </h1>
           <p className="text-2xl">
