@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 interface Role {
   isImposter: boolean
@@ -17,7 +17,7 @@ export default function RevealPage() {
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(-1)
+  const [prevPlayerIndex, setPrevPlayerIndex] = useState<number>(-1)
 
   useEffect(() => {
     // Load game data from sessionStorage (client-side only)
@@ -32,10 +32,6 @@ export default function RevealPage() {
           setPlayers(parsedPlayers)
           setRoles(parsedRoles)
           setIsLoading(false)
-          // Initialize current player index once data is loaded
-          if (currentPlayerIndex < 0 && playerIndex >= 0) {
-            setCurrentPlayerIndex(playerIndex)
-          }
         } catch (error) {
           console.error('Error parsing game data:', error)
           router.push('/')
@@ -48,14 +44,12 @@ export default function RevealPage() {
   }, [router])
 
   useEffect(() => {
-    // Immediately update current player index when route changes
-    if (playerIndex >= 0 && !isLoading) {
-      if (playerIndex !== currentPlayerIndex) {
-        setCurrentPlayerIndex(playerIndex)
-        setRevealed(false)
-      }
+    // Reset revealed state when player index changes
+    if (playerIndex !== prevPlayerIndex) {
+      setRevealed(false)
+      setPrevPlayerIndex(playerIndex)
     }
-  }, [playerIndex, currentPlayerIndex, isLoading])
+  }, [playerIndex, prevPlayerIndex])
 
   const handleReveal = () => {
     // Trigger vibration if supported
@@ -82,8 +76,7 @@ export default function RevealPage() {
     )
   }
 
-  // Only render player content if indices match to prevent showing old player
-  if (playerIndex !== currentPlayerIndex) {
+  if (playerIndex < 0 || isNaN(playerIndex) || !players.length) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -102,8 +95,10 @@ export default function RevealPage() {
     )
   }
 
+
   return (
     <div 
+      key={`reveal-${playerIndex}`}
       className={`w-full h-screen flex flex-col items-center justify-center fixed inset-0 ${
         !revealed 
           ? 'bg-gradient-to-br from-blue-500 to-blue-700 text-white' 
@@ -112,7 +107,7 @@ export default function RevealPage() {
       onClick={!revealed ? handleReveal : undefined}
     >
       {!revealed ? (
-        <div className="text-center space-y-8 animate-pulse">
+        <div key={`tap-to-reveal-${playerIndex}`} className="text-center space-y-8 animate-pulse">
           <h1 className="text-4xl font-bold mb-4">
             {currentPlayer}
           </h1>
