@@ -25,9 +25,10 @@ export default function RevealPage() {
       if (params && params.id) {
         const parsed = parseInt(String(params.id))
         if (!isNaN(parsed) && parsed >= 0) {
-          // If player index is changing, reset revealed state
+          // If player index is changing, reset revealed state and displayed index
           if (parsed !== playerIndex) {
             setRevealed(false)
+            setDisplayedPlayerIndex(-1) // Reset to prevent showing old player
           }
           setPlayerIndex(parsed)
         }
@@ -91,6 +92,7 @@ export default function RevealPage() {
     try {
       if (players.length > 0 && playerIndex < players.length - 1) {
         setRevealed(false)
+        setDisplayedPlayerIndex(-1) // Reset before navigation to prevent showing old player
         router.push(`/reveal/${playerIndex + 1}`)
       } else {
         router.push('/reveal-imposters')
@@ -102,7 +104,8 @@ export default function RevealPage() {
   }
 
   // Show loading while data is loading, player index is invalid, or indices don't match
-  if (isLoading || playerIndex < 0 || !players.length || playerIndex !== displayedPlayerIndex) {
+  // Also show loading if displayedPlayerIndex is -1 (reset state)
+  if (isLoading || playerIndex < 0 || !players.length || displayedPlayerIndex < 0 || playerIndex !== displayedPlayerIndex) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -110,8 +113,8 @@ export default function RevealPage() {
     )
   }
 
-  // Get current player safely using displayedPlayerIndex
-  const currentPlayer = displayedPlayerIndex >= 0 && displayedPlayerIndex < players.length 
+  // Get current player safely using displayedPlayerIndex (only use when it matches playerIndex)
+  const currentPlayer = displayedPlayerIndex >= 0 && displayedPlayerIndex < players.length && displayedPlayerIndex === playerIndex
     ? players[displayedPlayerIndex] 
     : null
 
