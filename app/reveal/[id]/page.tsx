@@ -33,7 +33,7 @@ export default function RevealPage() {
           setRoles(parsedRoles)
           setIsLoading(false)
           // Initialize prevPlayerIndex when data loads
-          if (playerIndex >= 0 && prevPlayerIndex < 0) {
+          if (playerIndex >= 0) {
             setPrevPlayerIndex(playerIndex)
           }
         } catch (error) {
@@ -45,7 +45,7 @@ export default function RevealPage() {
         router.push('/')
       }
     }
-  }, [router, playerIndex, prevPlayerIndex])
+  }, [router, playerIndex])
 
   useEffect(() => {
     // Reset revealed state and sync index immediately when player index changes
@@ -65,7 +65,7 @@ export default function RevealPage() {
   }
 
   const handleNext = () => {
-    if (playerIndex < players.length - 1) {
+    if (players.length > 0 && playerIndex < players.length - 1) {
       setRevealed(false)
       router.push(`/reveal/${playerIndex + 1}`)
     } else {
@@ -92,7 +92,7 @@ export default function RevealPage() {
 
   // Only compute player when indices match to prevent stale data
   const currentPlayer = useMemo(() => {
-    if (playerIndex === prevPlayerIndex && playerIndex >= 0 && players.length > playerIndex) {
+    if (playerIndex === prevPlayerIndex && playerIndex >= 0 && players.length > 0 && players.length > playerIndex) {
       return players[playerIndex]
     }
     return null
