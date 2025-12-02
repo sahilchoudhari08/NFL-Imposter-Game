@@ -1,13 +1,77 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { nflPlayersAllTime } from '@/data/nflPlayersAllTime'
+import { nflPlayersCurrent } from '@/data/nflPlayersCurrent'
+
+function assignRoles(players: string[], numImposters: number, playerList: string[]) {
+  const roles: Record<string, { isImposter: boolean; player?: string }> = {}
+  
+  // Select a random NFL player for real players
+  const realPlayer = playerList[Math.floor(Math.random() * playerList.length)]
+  
+  if (numImposters === 0) {
+    // All players get the same real player
+    players.forEach((player) => {
+      roles[player] = { isImposter: false, player: realPlayer }
+    })
+  } else {
+    // Randomly select imposter indices
+    const imposterIndices = new Set<number>()
+    while (imposterIndices.size < numImposters) {
+      const randomIndex = Math.floor(Math.random() * players.length)
+      imposterIndices.add(randomIndex)
+    }
+    
+    // Assign roles
+    players.forEach((player, index) => {
+      if (imposterIndices.has(index)) {
+        roles[player] = { isImposter: true }
+      } else {
+        roles[player] = { isImposter: false, player: realPlayer }
+      }
+    })
+  }
+  
+  return roles
+}
 
 export default function CompletePage() {
   const router = useRouter()
 
   const handleNewGame = () => {
-    // Keep the game data but reset to first player
-    router.push('/reveal/0')
+    try {
+      // Get current game data
+      const storedPlayers = sessionStorage.getItem('players')
+      const storedRoles = sessionStorage.getItem('gameRoles')
+      
+      if (!storedPlayers || !storedRoles) {
+        router.push('/')
+        return
+      }
+
+      const players = JSON.parse(storedPlayers)
+      const roles = JSON.parse(storedRoles)
+      
+      // Count imposters from previous game
+      const numImposters = players.filter((player: string) => roles[player]?.isImposter).length
+      
+      // Get selected mode from sessionStorage
+      const mode = sessionStorage.getItem('gameMode') || 'current'
+      const playerList = mode === 'allTime' ? nflPlayersAllTime : nflPlayersCurrent
+      
+      // Reassign roles with a new NFL player
+      const newRoles = assignRoles(players, numImposters, playerList)
+      
+      // Update sessionStorage with new roles
+      sessionStorage.setItem('gameRoles', JSON.stringify(newRoles))
+      
+      // Navigate to first player
+      router.push('/reveal/0')
+    } catch (error) {
+      console.error('Error creating new game:', error)
+      router.push('/')
+    }
   }
 
   return (
