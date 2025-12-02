@@ -23,10 +23,13 @@ export default function Home() {
           
           <div className="space-y-3 text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2 max-w-lg mx-auto">
             <p>
-              <strong className="text-gray-800 dark:text-gray-200">NFL Imposter Game</strong> is a free online party game perfect for game nights, parties, and NFL fans. Players take turns revealing their assigned NFL player role while trying to identify the imposter who doesn't know their player.
+              <strong className="text-gray-800 dark:text-gray-200">NFL Imposter Game</strong> is a free online party game and social deduction game perfect for game nights, parties, and NFL fans. This fun NFL guessing game challenges players to identify the imposter who doesn't know their assigned NFL player.
             </p>
             <p>
-              Choose between <strong className="text-gray-800 dark:text-gray-200">All-Time</strong> or <strong className="text-gray-800 dark:text-gray-200">Current NFL players</strong>, select 3-8 players, and let the game begin! No download required - works on any device.
+              Play this free online party game with 3-8 players. Choose between <strong className="text-gray-800 dark:text-gray-200">All-Time</strong> or <strong className="text-gray-800 dark:text-gray-200">Current NFL players</strong>, pass the phone around, and try to catch the imposter! No download required - works on mobile and desktop.
+            </p>
+            <p className="text-xs sm:text-sm pt-2">
+              Perfect for game night ideas, NFL fan groups, and online group games. Try this free imposter game online today!
             </p>
           </div>
         </div>
