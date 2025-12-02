@@ -11,50 +11,62 @@ interface Role {
 export default function RevealPage() {
   const router = useRouter()
   const params = useParams()
-  const playerIndex = params.id ? parseInt(params.id as string) : -1
+  
+  // Safely get playerIndex from params
+  const playerIndex = useMemo(() => {
+    if (!params || !params.id) return -1
+    const parsed = parseInt(params.id as string)
+    return isNaN(parsed) ? -1 : parsed
+  }, [params])
   
   const [players, setPlayers] = useState<string[]>([])
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [prevPlayerIndex, setPrevPlayerIndex] = useState<number>(-1)
+  const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(-1)
 
   useEffect(() => {
     // Load game data from sessionStorage (client-side only)
-    if (typeof window !== 'undefined') {
+    if (typeof window === 'undefined') return
+    
+    try {
       const storedPlayers = sessionStorage.getItem('players')
       const storedRoles = sessionStorage.getItem('gameRoles')
       
-      if (storedPlayers && storedRoles) {
-        try {
-          const parsedPlayers = JSON.parse(storedPlayers)
-          const parsedRoles = JSON.parse(storedRoles)
-          setPlayers(parsedPlayers)
-          setRoles(parsedRoles)
-          setIsLoading(false)
-          // Initialize prevPlayerIndex when data loads
-          if (playerIndex >= 0) {
-            setPrevPlayerIndex(playerIndex)
-          }
-        } catch (error) {
-          console.error('Error parsing game data:', error)
-          router.push('/')
-        }
-      } else {
-        // If no game data, redirect to home
+      if (!storedPlayers || !storedRoles) {
         router.push('/')
+        return
       }
+
+      const parsedPlayers = JSON.parse(storedPlayers)
+      const parsedRoles = JSON.parse(storedRoles)
+      
+      if (!Array.isArray(parsedPlayers) || typeof parsedRoles !== 'object') {
+        router.push('/')
+        return
+      }
+      
+      setPlayers(parsedPlayers)
+      setRoles(parsedRoles)
+      setIsLoading(false)
+      
+      // Initialize current player index
+      if (playerIndex >= 0) {
+        setCurrentPlayerIndex(playerIndex)
+      }
+    } catch (error) {
+      console.error('Error loading game data:', error)
+      router.push('/')
     }
-  }, [router, playerIndex])
+  }, [router])
 
   useEffect(() => {
-    // Reset revealed state and sync index immediately when player index changes
-    if (playerIndex !== prevPlayerIndex && playerIndex >= 0) {
+    // Update current player index when route changes
+    if (!isLoading && playerIndex >= 0 && playerIndex !== currentPlayerIndex) {
       setRevealed(false)
-      // Update immediately to prevent lag
-      setPrevPlayerIndex(playerIndex)
+      setCurrentPlayerIndex(playerIndex)
     }
-  }, [playerIndex, prevPlayerIndex])
+  }, [playerIndex, isLoading, currentPlayerIndex])
 
   const handleReveal = () => {
     // Trigger vibration if supported
@@ -82,7 +94,7 @@ export default function RevealPage() {
   }
 
   // Show loading if player index hasn't synced yet to prevent showing old player
-  if (playerIndex !== prevPlayerIndex) {
+  if (playerIndex !== currentPlayerIndex || currentPlayerIndex < 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -92,11 +104,11 @@ export default function RevealPage() {
 
   // Only compute player when indices match to prevent stale data
   const currentPlayer = useMemo(() => {
-    if (playerIndex === prevPlayerIndex && playerIndex >= 0 && players.length > 0 && players.length > playerIndex) {
-      return players[playerIndex]
+    if (currentPlayerIndex >= 0 && players.length > 0 && players.length > currentPlayerIndex) {
+      return players[currentPlayerIndex]
     }
     return null
-  }, [players, playerIndex, prevPlayerIndex])
+  }, [players, currentPlayerIndex])
 
   const role = useMemo(() => {
     return currentPlayer ? roles[currentPlayer] : undefined
