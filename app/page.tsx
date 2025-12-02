@@ -22,12 +22,21 @@ export default function Home() {
           </p>
         </div>
         
-        <button
-          onClick={() => router.push('/mode')}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-bold py-5 sm:py-6 px-6 sm:px-8 rounded-2xl text-lg sm:text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/50 animate-fade-in"
-        >
-          Start Game
-        </button>
+        <div className="space-y-4 w-full">
+          <button
+            onClick={() => router.push('/mode')}
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 dark:from-blue-500 dark:to-blue-600 dark:hover:from-blue-600 dark:hover:to-blue-700 text-white font-bold py-5 sm:py-6 px-6 sm:px-8 rounded-2xl text-lg sm:text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-400/50 animate-fade-in"
+          >
+            Start Game
+          </button>
+          
+          <button
+            onClick={() => router.push('/how-to-play')}
+            className="w-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold py-4 sm:py-5 px-6 sm:px-8 rounded-2xl text-base sm:text-lg transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl border-2 border-gray-200 dark:border-gray-700"
+          >
+            How to Play
+          </button>
+        </div>
       </div>
       
       <style jsx>{`
