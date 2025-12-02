@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import '../styles/globals.css'
 import DarkModeToggle from './components/DarkModeToggle'
 import HomeButton from './components/HomeButton'
+import StructuredData from './components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'NFL Imposter Game - Free Online Party Game',
@@ -36,6 +37,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <StructuredData />
+      </head>
       <body>
         <HomeButton />
         <DarkModeToggle />

@@ -20,6 +20,15 @@ export default function Home() {
           <p className="text-lg sm:text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-semibold tracking-wide px-2">
             This app assigns roles. Pass the phone around.
           </p>
+          
+          <div className="space-y-3 text-sm sm:text-base text-gray-600 dark:text-gray-400 px-2 max-w-lg mx-auto">
+            <p>
+              <strong className="text-gray-800 dark:text-gray-200">NFL Imposter Game</strong> is a free online party game perfect for game nights, parties, and NFL fans. Players take turns revealing their assigned NFL player role while trying to identify the imposter who doesn't know their player.
+            </p>
+            <p>
+              Choose between <strong className="text-gray-800 dark:text-gray-200">All-Time</strong> or <strong className="text-gray-800 dark:text-gray-200">Current NFL players</strong>, select 3-8 players, and let the game begin! No download required - works on any device.
+            </p>
+          </div>
         </div>
         
         <div className="space-y-4 w-full">
