@@ -53,6 +53,16 @@ export default function HowToPlayPage() {
 
             <div className="space-y-3">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                🏆 Winning Conditions
+              </h2>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 leading-relaxed">
+                <li><strong>Real players win</strong> if they correctly identify and vote out the imposter(s)</li>
+                <li><strong>Imposters win</strong> if they can correctly guess what the NFL player name is!</li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 💡 Tips
               </h2>
               <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 leading-relaxed">

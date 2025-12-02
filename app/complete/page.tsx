@@ -6,8 +6,8 @@ export default function CompletePage() {
   const router = useRouter()
 
   const handleNewGame = () => {
-    sessionStorage.clear()
-    router.push('/')
+    // Keep the game data but reset to first player
+    router.push('/reveal/0')
   }
 
   return (
