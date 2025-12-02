@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useParams } from 'next/navigation'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Role {
   isImposter: boolean
@@ -12,21 +12,29 @@ export default function RevealPage() {
   const router = useRouter()
   const params = useParams()
   
-  // Safely get playerIndex from params
-  const playerIndex = useMemo(() => {
-    if (!params || !params.id) return -1
-    const parsed = parseInt(params.id as string)
-    return isNaN(parsed) ? -1 : parsed
-  }, [params])
-  
   const [players, setPlayers] = useState<string[]>([])
   const [roles, setRoles] = useState<Record<string, Role>>({})
   const [revealed, setRevealed] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [currentPlayerIndex, setCurrentPlayerIndex] = useState<number>(-1)
+  const [playerIndex, setPlayerIndex] = useState<number>(-1)
 
+  // Get player index from params safely
   useEffect(() => {
-    // Load game data from sessionStorage (client-side only)
+    try {
+      if (params && params.id) {
+        const parsed = parseInt(String(params.id))
+        if (!isNaN(parsed) && parsed >= 0) {
+          setPlayerIndex(parsed)
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing player index:', error)
+      router.push('/')
+    }
+  }, [params, router])
+
+  // Load game data from sessionStorage
+  useEffect(() => {
     if (typeof window === 'undefined') return
     
     try {
@@ -41,7 +49,7 @@ export default function RevealPage() {
       const parsedPlayers = JSON.parse(storedPlayers)
       const parsedRoles = JSON.parse(storedRoles)
       
-      if (!Array.isArray(parsedPlayers) || typeof parsedRoles !== 'object') {
+      if (!Array.isArray(parsedPlayers) || typeof parsedRoles !== 'object' || parsedRoles === null) {
         router.push('/')
         return
       }
@@ -55,34 +63,34 @@ export default function RevealPage() {
     }
   }, [router])
 
-  useEffect(() => {
-    // Update current player index when route changes or data loads
-    if (!isLoading && playerIndex >= 0) {
-      if (playerIndex !== currentPlayerIndex) {
-        setRevealed(false)
-        setCurrentPlayerIndex(playerIndex)
-      }
-    }
-  }, [playerIndex, isLoading, currentPlayerIndex])
-
   const handleReveal = () => {
-    // Trigger vibration if supported
-    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate(100)
+    try {
+      if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate(100)
+      }
+      setRevealed(true)
+    } catch (error) {
+      console.error('Error in handleReveal:', error)
+      setRevealed(true)
     }
-    setRevealed(true)
   }
 
   const handleNext = () => {
-    if (players.length > 0 && playerIndex < players.length - 1) {
-      setRevealed(false)
-      router.push(`/reveal/${playerIndex + 1}`)
-    } else {
-      router.push('/reveal-imposters')
+    try {
+      if (players.length > 0 && playerIndex < players.length - 1) {
+        setRevealed(false)
+        router.push(`/reveal/${playerIndex + 1}`)
+      } else {
+        router.push('/reveal-imposters')
+      }
+    } catch (error) {
+      console.error('Error in handleNext:', error)
+      router.push('/')
     }
   }
 
-  if (isLoading || playerIndex < 0 || isNaN(playerIndex) || !players.length) {
+  // Show loading while data is loading or player index is invalid
+  if (isLoading || playerIndex < 0 || !players.length) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Loading...</div>
@@ -90,28 +98,12 @@ export default function RevealPage() {
     )
   }
 
-  // Show loading if player index hasn't synced yet to prevent showing old player
-  if (playerIndex !== currentPlayerIndex || currentPlayerIndex < 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
-        <div className="text-white">Loading...</div>
-      </div>
-    )
-  }
+  // Get current player safely
+  const currentPlayer = playerIndex >= 0 && playerIndex < players.length 
+    ? players[playerIndex] 
+    : null
 
-  // Only compute player when indices match to prevent stale data
-  const currentPlayer = useMemo(() => {
-    if (currentPlayerIndex >= 0 && players.length > 0 && players.length > currentPlayerIndex) {
-      return players[currentPlayerIndex]
-    }
-    return null
-  }, [players, currentPlayerIndex])
-
-  const role = useMemo(() => {
-    return currentPlayer ? roles[currentPlayer] : undefined
-  }, [roles, currentPlayer])
-
-  if (!currentPlayer || !role) {
+  if (!currentPlayer) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
         <div className="text-white">Error: Player not found</div>
@@ -119,6 +111,15 @@ export default function RevealPage() {
     )
   }
 
+  const role = roles[currentPlayer]
+
+  if (!role) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-700 fixed inset-0">
+        <div className="text-white">Error: Role not found</div>
+      </div>
+    )
+  }
 
   return (
     <div 
@@ -131,8 +132,8 @@ export default function RevealPage() {
       onClick={!revealed ? handleReveal : undefined}
     >
       {!revealed ? (
-        <div key={`tap-to-reveal-${playerIndex}`} className="text-center space-y-8 animate-pulse">
-          <h1 key={`player-name-${playerIndex}`} className="text-4xl font-bold mb-4">
+        <div className="text-center space-y-8 animate-pulse">
+          <h1 className="text-4xl font-bold mb-4">
             {currentPlayer}
           </h1>
           <p className="text-2xl">
@@ -157,7 +158,7 @@ export default function RevealPage() {
               <div className="space-y-4">
                 <p className="text-xl text-gray-600 dark:text-gray-400 mb-2">Your player is:</p>
                 <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">
-                  {role.player}
+                  {role.player || 'Unknown'}
                 </p>
               </div>
             )}
@@ -173,15 +174,6 @@ export default function RevealPage() {
       )}
       
       <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-        
         @keyframes scale-in {
           from {
             transform: translate3d(0, 0, 0) scale(0.9);
@@ -191,10 +183,6 @@ export default function RevealPage() {
             transform: translate3d(0, 0, 0) scale(1);
             opacity: 1;
           }
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
         .animate-scale-in {
@@ -215,4 +203,3 @@ export default function RevealPage() {
     </div>
   )
 }
-
