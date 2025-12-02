@@ -108,7 +108,7 @@ export default function StartPage() {
           How many players?
         </h1>
         
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
+        <div key="players-card" className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
           <div className="grid grid-cols-3 gap-4">
             {[3, 4, 5, 6, 7, 8].map((num) => (
               <button

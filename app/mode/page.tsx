@@ -17,7 +17,7 @@ export default function ModePage() {
           Choose Mode
         </h1>
         
-        <div className="space-y-4 animate-fade-in">
+        <div key="mode-buttons" className="space-y-4 animate-fade-in">
           <button
             onClick={() => handleModeSelect('allTime')}
             className="w-full bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white font-bold py-6 px-6 rounded-2xl text-xl transition-transform duration-200 hover:scale-105 active:scale-95 shadow-2xl"

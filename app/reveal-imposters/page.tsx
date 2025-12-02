@@ -75,7 +75,7 @@ export default function RevealImpostersPage() {
           The Imposters
         </h1>
         
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
+        <div key="reveal-imposters-card" className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 space-y-6 animate-fade-in">
           {imposters.length === 0 ? (
             <div className="space-y-4">
               <div className="text-6xl mb-4">🎉</div>
